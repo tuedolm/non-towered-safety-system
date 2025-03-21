@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  data-ingestion:
+    build:
+      context: ./backend/go/data_ingestion
+    environment:
+      - OPENSKY_USERNAME=${OPENSKY_USERNAME}
+      - OPENSKY_PASSWORD=${OPENSKY_PASSWORD}
+    volumes:
+      - data-volume:/data
+    restart: unless-stopped
+
+  conflict-detection:
+    build:
+      context: ./backend/go/conflict_detection
+    depends_on:
+      - data-ingestion
+    volumes:
+      - data-volume:/data
+    restart: unless-stopped
+
+  airport-intelligence:
+    build:
+      context: ./backend/python/airport_intelligence
+    volumes:
+      - data-volume:/data
+    restart: unless-stopped
+
+  advisory-generation:
+    build:
+      context: ./backend/python/advisory_generation
+    depends_on:
+      - conflict-detection
+      - airport-intelligence
+    volumes:
+      - data-volume:/data
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - API_URL=http://gateway:8080
+    depends_on:
+      - api-gateway
+    restart: unless-stopped
+
+  api-gateway:
+    build:
+      context: ./backend/api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - data-ingestion
+      - conflict-detection
+      - advisory-generation
+    restart: unless-stopped
+
+volumes:
+  data-volume: 

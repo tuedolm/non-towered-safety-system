@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 240, 240, 240;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 10, 10, 10;
+    --background-end-rgb: 30, 30, 30;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* Leaflet Map Styles */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  border-radius: 0.5rem;
+  z-index: 0;
+}
+
+/* Aircraft marker styles */
+.aircraft-marker {
+  transform-origin: center;
+  transition: transform 1s linear;
+}
+
+.aircraft-marker-critical {
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.8));
+}
+
+.aircraft-marker-warning {
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.8));
+}
+
+/* Alert panel styling */
+.alert-panel {
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 0.5rem;
+}
+
+.alert-critical {
+  border-left: 4px solid rgb(239, 68, 68);
+}
+
+.alert-urgent {
+  border-left: 4px solid rgb(249, 115, 22);
+}
+
+.alert-warning {
+  border-left: 4px solid rgb(245, 158, 11);
+}
+
+.alert-caution {
+  border-left: 4px solid rgb(234, 179, 8);
+}
+
+.alert-info {
+  border-left: 4px solid rgb(59, 130, 246);
+}
+
+/* Runway visualization */
+.runway {
+  stroke: white;
+  stroke-width: 2;
+  fill: #333;
+}
+
+.runway-active {
+  stroke: yellow;
+  stroke-width: 3;
+}
+
+/* Approach path visualization */
+.approach-path {
+  stroke-dasharray: 10, 5;
+  stroke-width: 2;
+}
+
+.approach-clear {
+  stroke: rgb(34, 197, 94);
+}
+
+.approach-warning {
+  stroke: rgb(245, 158, 11);
+}
+
+.approach-conflict {
+  stroke: rgb(239, 68, 68);
+} 
